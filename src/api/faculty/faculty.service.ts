@@ -36,7 +36,7 @@ export class FacultyService {
 
     async getFacultyById(id: number): Promise<ServiceResponse<Faculty | null>> {
         try {
-            const result = await this.facultyRepository.getFacultyById(id);
+            const result = await this.facultyRepository.getFacultyBy("id", id);
             if (!result) {
                 logger.error("Faculty not found!");
                 return ServiceResponse.failure(
@@ -110,7 +110,7 @@ export class FacultyService {
         description: string
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const exists = await this.facultyRepository.isFacultyExists("id", id);
+            const exists = await this.facultyRepository.getFacultyBy("id", id);
             if (!exists) {
                 logger.error("Faculty not found!");
                 return ServiceResponse.failure(
@@ -119,18 +119,26 @@ export class FacultyService {
                     StatusCodes.NOT_FOUND
                 );
             }
-            const sname_exists = await this.facultyRepository.isFacultyExists(
+            const sname_exists = await this.facultyRepository.getFacultyBy(
                 "short_name",
                 short_name
             );
-            const fname_exists = await this.facultyRepository.isFacultyExists(
+            const fname_exists = await this.facultyRepository.getFacultyBy(
                 "full_name",
                 full_name
             );
-            if (sname_exists || fname_exists) {
-                logger.error("Faculty already exists!");
+            if (sname_exists && sname_exists.id !== id) {
+                logger.error("Faculty with this short name already exists!");
                 return ServiceResponse.failure(
-                    "Faculty with full_name/ short_name already exists!",
+                    "Faculty with this short name already exists!",
+                    null,
+                    StatusCodes.CONFLICT
+                );
+            }
+            if (fname_exists && fname_exists.id !== id) {
+                logger.error("Faculty with this full name already exists!");
+                return ServiceResponse.failure(
+                    "Faculty with this full name already exists!",
                     null,
                     StatusCodes.CONFLICT
                 );

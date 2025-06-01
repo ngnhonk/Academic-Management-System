@@ -60,4 +60,26 @@ export const commonValidations = {
 			message:
 				"Salary grade must be greater than 0 and less than or equal to 5",
 		}),
+	year: z
+		.number({
+			required_error: "Year is required",
+			invalid_type_error: "Year must be a number",
+		})
+		.int("Year must be an integer")
+		.min(
+			new Date().getFullYear(),
+			`Year cannot be smaller than ${new Date().getFullYear()}`
+		)
+		.max(
+			new Date().getFullYear() + 10,
+			`Year cannot be greater than ${new Date().getFullYear() + 10}`
+		),
+
+	date: z
+		.preprocess((arg) => {
+			if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+		}, z.date({ required_error: "Date is required" }))
+		.refine((date) => !isNaN(date.getTime()), {
+			message: "Invalid date format",
+		}),
 };
