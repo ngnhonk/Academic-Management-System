@@ -7,10 +7,6 @@ export class FacultyRepository {
         return result;
     }
 
-    async getFacultyById(id: number): Promise<Faculty | null> {
-        return await db("faculty").select("*").where({ id }).first();
-    }
-
     async createFaculty(full_name: string, short_name: string, description: string): Promise<number> {
         const [id] = await db("faculty").insert({ full_name, short_name, description });
         return id;
@@ -30,5 +26,12 @@ export class FacultyRepository {
             .where({ [field]: value })
             .first();
         return !!exists;
+    }
+
+    async getFacultyBy(field: "id" | "full_name" | "short_name", value: string | number): Promise<Faculty | null> {
+        const result = await db("faculty")
+            .where({ [field]: value })
+            .first();
+        return result;
     }
 }

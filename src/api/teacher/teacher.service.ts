@@ -4,7 +4,6 @@ import type { Teacher } from "@/api/teacher/teacher.model";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { TeacherRepository } from "./teacher.repository";
 
-
 export class TeacherService {
     private teacherRepository: TeacherRepository;
 
@@ -37,7 +36,7 @@ export class TeacherService {
 
     async getTeacherById(id: number): Promise<ServiceResponse<Teacher | null>> {
         try {
-            const result = await this.teacherRepository.getTeacherById(id);
+            const result = await this.teacherRepository.getTeacherBy("id", id);
             if (!result) {
                 logger.error("Teacher not found!");
                 return ServiceResponse.failure(
@@ -67,8 +66,14 @@ export class TeacherService {
         faculty_id: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const phoneExists = await this.teacherRepository.isTeacherExists("phone", phone);
-            const emailExists = await this.teacherRepository.isTeacherExists("email", email);
+            const phoneExists = await this.teacherRepository.isTeacherExists(
+                "phone",
+                phone
+            );
+            const emailExists = await this.teacherRepository.isTeacherExists(
+                "email",
+                email
+            );
             if (phoneExists || emailExists) {
                 logger.error("Teacher with this phone/email already exists!");
                 return ServiceResponse.failure(
@@ -84,9 +89,13 @@ export class TeacherService {
                 degree_id,
                 faculty_id
             );
-            return ServiceResponse.success<number>("Teacher created successfully", id);
+            return ServiceResponse.success<number>(
+                "Teacher created successfully",
+                id
+            );
         } catch (error) {
-            const errorMessage = `Error creating teacher: ${(error as Error).message}`;
+            const errorMessage = `Error creating teacher: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while creating teacher.",
@@ -105,7 +114,7 @@ export class TeacherService {
         faculty_id: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const teacherExists = await this.teacherRepository.getTeacherById(id);
+            const teacherExists = await this.teacherRepository.getTeacherBy("id", id);
             if (!teacherExists) {
                 logger.error("Teacher not found for update!");
                 return ServiceResponse.failure(
@@ -115,12 +124,29 @@ export class TeacherService {
                 );
             }
 
-            const phoneExists = await this.teacherRepository.isTeacherExists("phone", phone);
-            const emailExists = await this.teacherRepository.isTeacherExists("email", email);
-            if (phoneExists || emailExists) {
-                logger.error("Teacher with this phone/email already exists!");
+            const phoneExists = await this.teacherRepository.getTeacherBy(
+                "phone",
+                phone
+            );
+            const emailExists = await this.teacherRepository.getTeacherBy(
+                "email",
+                email
+            );
+            if (phoneExists && phoneExists.id !== id) {
+                logger.error(
+                    `Phone number ${phone} already exists for another teacher!`
+                );
                 return ServiceResponse.failure(
-                    "Teacher with this phone/email already exists",
+                    "Phone number already exists",
+                    null,
+                    StatusCodes.CONFLICT
+                );
+            }
+
+            if (emailExists && emailExists.id !== id) {
+                logger.error(`Email ${email} already exists for another teacher!`);
+                return ServiceResponse.failure(
+                    "Email already exists",
                     null,
                     StatusCodes.CONFLICT
                 );
@@ -134,9 +160,13 @@ export class TeacherService {
                 degree_id,
                 faculty_id
             );
-            return ServiceResponse.success<number>("Teacher updated successfully", result);
+            return ServiceResponse.success<number>(
+                "Teacher updated successfully",
+                result
+            );
         } catch (error) {
-            const errorMessage = `Error updating teacher with id ${id}: ${(error as Error).message}`;
+            const errorMessage = `Error updating teacher with id ${id}: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while updating teacher.",
@@ -148,7 +178,7 @@ export class TeacherService {
 
     async deleteTeacher(id: number): Promise<ServiceResponse<number | null>> {
         try {
-            const teacherExists = await this.teacherRepository.getTeacherById(id);
+            const teacherExists = await this.teacherRepository.getTeacherBy("id", id);
             if (!teacherExists) {
                 logger.error("Teacher not found for deletion!");
                 return ServiceResponse.failure(
@@ -159,9 +189,13 @@ export class TeacherService {
             }
 
             const result = await this.teacherRepository.deleteTeacher(id);
-            return ServiceResponse.success<number>("Teacher deleted successfully", result);
+            return ServiceResponse.success<number>(
+                "Teacher deleted successfully",
+                result
+            );
         } catch (error) {
-            const errorMessage = `Error deleting teacher with id ${id}: ${(error as Error).message}`;
+            const errorMessage = `Error deleting teacher with id ${id}: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while deleting teacher.",
@@ -170,6 +204,5 @@ export class TeacherService {
             );
         }
     }
-
 }
 export const teacherService = new TeacherService();

@@ -36,7 +36,7 @@ export class DegreeService {
 
     async getDegreeById(id: number): Promise<ServiceResponse<Degree | null>> {
         try {
-            const result = await this.degreeRepository.getDegreeById(id);
+            const result = await this.degreeRepository.getDegreeBy("id", id);
             if (!result) {
                 logger.error("Degree not found!");
                 return ServiceResponse.failure(
@@ -106,7 +106,7 @@ export class DegreeService {
         salary_grade: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const exists = await this.degreeRepository.isDegreeExists("id", id);
+            const exists = await this.degreeRepository.getDegreeBy("id", id);
             if (!exists) {
                 logger.error("Degree not found!");
                 return ServiceResponse.failure(
@@ -115,22 +115,31 @@ export class DegreeService {
                     StatusCodes.NOT_FOUND
                 );
             }
-            const sname_exists = await this.degreeRepository.isDegreeExists(
+            const sname_exists = await this.degreeRepository.getDegreeBy(
                 "short_name",
                 short_name
             );
-            const fname_exists = await this.degreeRepository.isDegreeExists(
+            const fname_exists = await this.degreeRepository.getDegreeBy(
                 "full_name",
                 full_name
             );
-            if (sname_exists || fname_exists) {
-                logger.error("Degree already exists!");
+            if (sname_exists && sname_exists.id !== id) {
+                logger.error("Faculty with this short name already exists!");
                 return ServiceResponse.failure(
-                    "Degree with full_name/ short_name already exists!",
+                    "Faculty with this short name already exists!",
                     null,
                     StatusCodes.CONFLICT
                 );
             }
+            if (fname_exists && fname_exists.id !== id) {
+                logger.error("Faculty with this full name already exists!");
+                return ServiceResponse.failure(
+                    "Faculty with this full name already exists!",
+                    null,
+                    StatusCodes.CONFLICT
+                );
+            }
+
             const result = await this.degreeRepository.updateDegree(
                 id,
                 full_name,

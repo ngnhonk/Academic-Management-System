@@ -7,10 +7,6 @@ export class TeacherRepository {
         return result;
     }
 
-    async getTeacherById(id: number): Promise<Teacher | null> {
-        return await db("teacher").select("*").where({ id }).first();
-    }
-
     async createTeacher(full_name: string, phone: string, email: string, degree_id: number, faculty_id: number): Promise<number> {
         const [id] = await db("teacher").insert({ full_name, phone, email, degree_id, faculty_id });
         return id;
@@ -30,5 +26,12 @@ export class TeacherRepository {
             .where({ [field]: value })
             .first();
         return !!exists;
+    }
+
+    async getTeacherBy(field: "id" | "phone" | "email", value: string | number): Promise<Teacher | null> {
+        const result = await db("teacher")
+            .where({ [field]: value })
+            .first();
+        return result;
     }
 }

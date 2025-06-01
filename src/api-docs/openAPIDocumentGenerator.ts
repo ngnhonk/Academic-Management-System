@@ -8,12 +8,20 @@ import { userRegistry } from "@/api/user/user.routes";
 import { degreeRegistry } from "@/api/degree/degree.routes";
 import { facultyRegistry } from "@/api/faculty/faculty.routes";
 import { teacherRegistry } from "@/api/teacher/teacher.routes";
+import { semesterRegistry } from "@/api/semester/semester.routes";
 export type OpenAPIDocument = ReturnType<
 	OpenApiGeneratorV3["generateDocument"]
 >;
 
 export function generateOpenAPIDocument(): OpenAPIDocument {
-	const registry = new OpenAPIRegistry([healthCheckRegistry, userRegistry, degreeRegistry, facultyRegistry, teacherRegistry]);
+	const registry = new OpenAPIRegistry([
+		healthCheckRegistry,
+		userRegistry,
+		degreeRegistry,
+		facultyRegistry,
+		teacherRegistry,
+		semesterRegistry
+	]);
 	const generator = new OpenApiGeneratorV3(registry.definitions);
 
 	registry.registerComponent("securitySchemes", "bearerAuth", {

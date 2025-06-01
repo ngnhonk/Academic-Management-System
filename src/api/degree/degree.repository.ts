@@ -7,10 +7,6 @@ export class DegreeRepository {
         return result;
     }
 
-    async getDegreeById(id: number): Promise<Degree | null> {
-        return await db("degrees").select("*").where({ id }).first();
-    }
-
     async createDegree(full_name: string, short_name: string, salary_grade: number): Promise<number> {
         const [id] = await db("degrees").insert({ full_name, short_name, salary_grade });
         return id;
@@ -30,5 +26,12 @@ export class DegreeRepository {
             .where({ [field]: value })
             .first();
         return !!exists;
+    }
+
+    async getDegreeBy(field: "id" | "full_name" | "short_name", value: string | number): Promise<Degree | null> {
+        const result = await db("degrees")
+            .where({ [field]: value })
+            .first();
+        return result;
     }
 }
