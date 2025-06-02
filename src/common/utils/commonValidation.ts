@@ -13,7 +13,12 @@ export const commonValidations = {
 		})
 		.nonempty("This field cannot be empty")
 		.min(1, "This field cannot be empty"),
-
+	role: z.enum(["student", "teacher", "moderator", "admin"], {
+		errorMap: () => ({
+			message:
+				"Message: Role must be one of 'student', 'teacher', 'moderator', or 'admin'",
+		}),
+	}),
 	email: z
 		.string()
 		.email("Invalid email format")
@@ -82,4 +87,25 @@ export const commonValidations = {
 		.refine((date) => !isNaN(date.getTime()), {
 			message: "Invalid date format",
 		}),
+
+	otp_code: z
+		.string()
+		.length(6, "OTP must be 6 digits")
+		.nonempty("Message: OTP code cannot be empty"),
+
+	positive_number: z
+		.number({
+			required_error: "Positive number is required",
+			invalid_type_error: "Must be a number",
+		})
+		.int("Must be an integer")
+		.positive("Must be a positive number"),
+
+	coefficient: z
+		.number({
+			required_error: "Coefficient is required",
+			invalid_type_error: "Coefficient must be a number",
+		})
+		.min(0, "Coefficient must be at least 0")
+		.max(3.5, "Coefficient must not exceed 3.5"),
 };

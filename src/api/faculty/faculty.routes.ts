@@ -28,12 +28,12 @@ facultyRegistry.registerPath({
 
 facultyRouter.get("/", facultyController.getAllFaculties);
 
-// Get an faculty
+// Get a faculty
 facultyRegistry.registerPath({
     method: "get",
     path: "/faculties/{id}",
     tags: ["Faculty"],
-    summary: "Get an faculty by id",
+    summary: "Get a faculty by id",
     request: { params: GetFaciultySchema.shape.params },
     responses: createApiResponse(FacultySchema, "Success"),
 });
@@ -44,12 +44,12 @@ facultyRouter.get(
     facultyController.getFacultyById
 );
 
-// Create an faculty
+// Create a faculty
 facultyRegistry.registerPath({
     method: "post",
     path: "/faculties",
     tags: ["Faculty"],
-    summary: "Create an faculty",
+    summary: "Create a faculty",
     request: {
         body: {
             content: {
@@ -93,7 +93,7 @@ facultyRouter.put(
     facultyController.updateFaculty
 );
 
-// Delete an faculty
+// Delete a faculty
 facultyRegistry.registerPath({
     method: "delete",
     path: "/faculties/{id}",

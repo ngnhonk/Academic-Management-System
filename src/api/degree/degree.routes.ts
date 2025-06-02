@@ -1,15 +1,16 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import express, { type Router } from "express";
 import { z } from "zod";
-
+import { validateRequest } from "@/common/utils/httpHandlers";
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
+
 import {
     DegreeSchema,
     GetDegreeSchema,
     CreateDegreeSchema,
     UpdateDegreeSchema
 } from "@/api/degree/degree.model";
-import { validateRequest } from "@/common/utils/httpHandlers";
+
 import { degreeController } from "./degree.controller";
 
 export const degreeRegistry = new OpenAPIRegistry();
@@ -28,12 +29,12 @@ degreeRegistry.registerPath({
 
 degreeRouter.get("/", degreeController.getAllDegrees);
 
-// Get an degree
+// Get a degree
 degreeRegistry.registerPath({
     method: "get",
     path: "/degrees/{id}",
     tags: ["Degree"],
-    summary: "Get an degree by id",
+    summary: "Get a degree by id",
     request: { params: GetDegreeSchema.shape.params },
     responses: createApiResponse(DegreeSchema, "Success"),
 });
@@ -44,12 +45,12 @@ degreeRouter.get(
     degreeController.getDegreeById
 );
 
-// Create an degree
+// Create a degree
 degreeRegistry.registerPath({
     method: "post",
     path: "/degrees",
     tags: ["Degree"],
-    summary: "Create an degree",
+    summary: "Create a degree",
     request: {
         body: {
             content: {

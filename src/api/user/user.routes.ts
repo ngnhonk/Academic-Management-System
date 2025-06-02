@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
 import {
-	ChangePasswordSchema,
 	CreateUserSchema,
 	GetUserSchema,
 	UpdateUserSchema,
@@ -92,31 +91,6 @@ userRouter.put(
 	"/:id",
 	validateRequest(UpdateUserSchema),
 	userController.updateUser
-);
-
-// Change user password
-userRegistry.registerPath({
-	method: "put",
-	path: "/users/{id}/password",
-	tags: ["User"],
-	summary: "Change password",
-	request: {
-		params: GetUserSchema.shape.params,
-		body: {
-			content: {
-				"application/json": {
-					schema: ChangePasswordSchema.shape.body,
-				},
-			},
-		},
-	},
-	responses: createApiResponse(UserSchema, "Success"),
-});
-
-userRouter.put(
-	"/:id/password",
-	validateRequest(ChangePasswordSchema),
-	userController.changePassword
 );
 
 // Delete an user information

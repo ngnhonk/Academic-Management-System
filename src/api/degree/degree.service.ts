@@ -46,8 +46,8 @@ export class DegreeService {
                 );
             }
             return ServiceResponse.success<Degree>("Degree found", result);
-        } catch (ex) {
-            const errorMessage = `Error finding user with id ${id}:, ${(ex as Error).message
+        } catch (error) {
+            const errorMessage = `Error finding user with id ${id}:, ${(error as Error).message
                 }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(

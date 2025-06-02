@@ -14,11 +14,9 @@ class TeacherController {
     };
 
     public createTeacher: RequestHandler = async (req: Request, res: Response) => {
-        const { full_name, phone, email, degree_id, faculty_id } = req.body;
+        const { user_id, email, degree_id, faculty_id } = req.body;
         const serviceResponse = await teacherService.createTeacher(
-            full_name,
-            phone,
-            email,
+            user_id,
             degree_id,
             faculty_id
         );
@@ -27,12 +25,9 @@ class TeacherController {
 
     public updateTeacher: RequestHandler = async (req: Request, res: Response) => {
         const id = Number.parseInt(req.params.id as string, 10);
-        const { full_name, phone, email, degree_id, faculty_id } = req.body;
+        const { degree_id, faculty_id } = req.body;
         const serviceResponse = await teacherService.updateTeacher(
             id,
-            full_name,
-            phone,
-            email,
             degree_id,
             faculty_id
         );

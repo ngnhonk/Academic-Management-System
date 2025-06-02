@@ -9,6 +9,8 @@ import { degreeRegistry } from "@/api/degree/degree.routes";
 import { facultyRegistry } from "@/api/faculty/faculty.routes";
 import { teacherRegistry } from "@/api/teacher/teacher.routes";
 import { semesterRegistry } from "@/api/semester/semester.routes";
+import { authRegistry } from "@/api/auth/auth.routes";
+import { courseRegistry } from "@/api/course/course.routes";
 export type OpenAPIDocument = ReturnType<
 	OpenApiGeneratorV3["generateDocument"]
 >;
@@ -16,11 +18,13 @@ export type OpenAPIDocument = ReturnType<
 export function generateOpenAPIDocument(): OpenAPIDocument {
 	const registry = new OpenAPIRegistry([
 		healthCheckRegistry,
+		authRegistry,
 		userRegistry,
 		degreeRegistry,
 		facultyRegistry,
 		teacherRegistry,
-		semesterRegistry
+		semesterRegistry,
+		courseRegistry
 	]);
 	const generator = new OpenApiGeneratorV3(registry.definitions);
 

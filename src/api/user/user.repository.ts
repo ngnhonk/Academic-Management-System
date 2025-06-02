@@ -7,10 +7,6 @@ export class UserRepository {
 		return result;
 	}
 
-	async getUserById(id: number): Promise<User | null> {
-		return await db("users").select("*").where({ id }).first();
-	}
-
 	async createUser(
 		full_name: string,
 		email: string,
@@ -26,13 +22,13 @@ export class UserRepository {
 		return id;
 	}
 
-	async updateUser(id: number, full_name: string): Promise<number> {
+	async updateUser(id: number, full_name: string, phone: string, email: string): Promise<number> {
 		const result = await db("users").where({ id }).update({ full_name });
 		return result;
 	}
 
-	async updatePassword(id: number, hash_password: string): Promise<number> {
-		const result = await db("users").where({ id }).update({ hash_password });
+	async updatePassword(email: string, hash_password: string): Promise<number> {
+		const result = await db("users").where({ email }).update({ hash_password });
 		return result;
 	}
 
@@ -50,4 +46,14 @@ export class UserRepository {
 		return !!exists;
 	}
 
+
+	async getUserBy(
+		field: "id" | "phone" | "email" | "full_name",
+		value: string | number
+	): Promise<User | null> {
+		const result = await db("users")
+			.where({ [field]: value })
+			.first();
+		return result;
+	}
 }

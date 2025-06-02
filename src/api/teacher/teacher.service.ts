@@ -59,35 +59,27 @@ export class TeacherService {
     }
 
     async createTeacher(
-        full_name: string,
-        phone: string,
-        email: string,
+        user_id: number,
         degree_id: number,
         faculty_id: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const phoneExists = await this.teacherRepository.isTeacherExists(
-                "phone",
-                phone
+            const teacherExists = await this.teacherRepository.isTeacherExists(
+                "id",
+                user_id
             );
-            const emailExists = await this.teacherRepository.isTeacherExists(
-                "email",
-                email
-            );
-            if (phoneExists || emailExists) {
-                logger.error("Teacher with this phone/email already exists!");
+            if (teacherExists) {
+                logger.error("Teacher with this user_id already exists!");
                 return ServiceResponse.failure(
-                    "Teacher with this phone/email already exists",
+                    "Teacher with this user_id already exists!",
                     null,
                     StatusCodes.CONFLICT
                 );
             }
             const id = await this.teacherRepository.createTeacher(
-                full_name,
-                phone,
-                email,
+                user_id,
                 degree_id,
-                faculty_id
+                faculty_id,
             );
             return ServiceResponse.success<number>(
                 "Teacher created successfully",
@@ -107,9 +99,6 @@ export class TeacherService {
 
     async updateTeacher(
         id: number,
-        full_name: string,
-        phone: string,
-        email: string,
         degree_id: number,
         faculty_id: number
     ): Promise<ServiceResponse<number | null>> {
@@ -124,39 +113,8 @@ export class TeacherService {
                 );
             }
 
-            const phoneExists = await this.teacherRepository.getTeacherBy(
-                "phone",
-                phone
-            );
-            const emailExists = await this.teacherRepository.getTeacherBy(
-                "email",
-                email
-            );
-            if (phoneExists && phoneExists.id !== id) {
-                logger.error(
-                    `Phone number ${phone} already exists for another teacher!`
-                );
-                return ServiceResponse.failure(
-                    "Phone number already exists",
-                    null,
-                    StatusCodes.CONFLICT
-                );
-            }
-
-            if (emailExists && emailExists.id !== id) {
-                logger.error(`Email ${email} already exists for another teacher!`);
-                return ServiceResponse.failure(
-                    "Email already exists",
-                    null,
-                    StatusCodes.CONFLICT
-                );
-            }
-
             const result = await this.teacherRepository.updateTeacher(
                 id,
-                full_name,
-                phone,
-                email,
                 degree_id,
                 faculty_id
             );
