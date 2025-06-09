@@ -20,7 +20,7 @@ classSectionRegistry.register("ClassSection", ClassSectionSchema);
 // Get all class sections
 classSectionRegistry.registerPath({
     method: "get",
-    path: "/class_sections",
+    path: "/class-sections",
     tags: ["Class Section"],
     summary: "Get class section list",
     responses: createApiResponse(z.array(ClassSectionSchema), "Success"),
@@ -32,7 +32,7 @@ classSectionRouter.get("/", classSectionController.getAllClassSections);
 // Get a class section
 classSectionRegistry.registerPath({
     method: "get",
-    path: "/class_sections/{id}",
+    path: "/class-sections/{id}",
     tags: ["Class Section"],
     summary: "Get a class section by id",
     request: { params: GetClassSchema.shape.params },
@@ -48,7 +48,7 @@ classSectionRouter.get(
 // Create a class section
 classSectionRegistry.registerPath({
     method: "post",
-    path: "/class_sections",
+    path: "/class-sections",
     tags: ["Class Section"],
     summary: "Create a class section",
     request: {
@@ -72,7 +72,7 @@ classSectionRouter.post(
 // Update a class section information
 classSectionRegistry.registerPath({
     method: "put",
-    path: "/class_sections/{id}",
+    path: "/class-sections/{id}",
     tags: ["Class Section"],
     summary: "Update class section information",
     request: {
@@ -98,7 +98,7 @@ classSectionRouter.put(
 // Delete a class section
 classSectionRegistry.registerPath({
     method: "delete",
-    path: "/class_sections/{id}",
+    path: "/class-sections/{id}",
     tags: ["Class Section"],
     summary: "Delete a class section",
     request: {

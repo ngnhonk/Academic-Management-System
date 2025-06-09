@@ -3,12 +3,26 @@ import { logger } from "@/server";
 import type { Teacher } from "@/api/teacher/teacher.model";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { ClassSectionRepository } from "./class_section.repository";
+import { TeacherRepository } from "../teacher/teacher.repository";
+import { CourseRepository } from "../course/course.repository";
+import { SemesterRepository } from "../semester/semester.repository";
 
 export class ClassSectionService {
     private classSectionRepository: ClassSectionRepository;
+    private teacherRepository: TeacherRepository;
+    private courseRepository: CourseRepository;
+    private semesterRepository: SemesterRepository;
 
-    constructor(repository: ClassSectionRepository = new ClassSectionRepository()) {
+    constructor(
+        repository: ClassSectionRepository = new ClassSectionRepository(),
+        semesterRepo: SemesterRepository = new SemesterRepository(),
+        courseRepo: CourseRepository = new CourseRepository(),
+        teacherRepo: TeacherRepository = new TeacherRepository()
+    ) {
         this.classSectionRepository = repository;
+        this.semesterRepository = semesterRepo;
+        this.courseRepository = courseRepo;
+        this.teacherRepository = teacherRepo;
     }
 
     async getAllClassSections(): Promise<ServiceResponse<Teacher[] | null>> {
@@ -23,7 +37,8 @@ export class ClassSectionService {
             }
             return ServiceResponse.success<Teacher[]>("Class sections found", result);
         } catch (error) {
-            const errorMessage = `Error finding all class sections: $${(error as Error).message}`;
+            const errorMessage = `Error finding all class sections: $${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while retrieving class sections.",
@@ -33,9 +48,14 @@ export class ClassSectionService {
         }
     }
 
-    async getClassSectionById(id: number): Promise<ServiceResponse<Teacher | null>> {
+    async getClassSectionById(
+        id: number
+    ): Promise<ServiceResponse<Teacher | null>> {
         try {
-            const result = await this.classSectionRepository.getClassSectionBy("id", id);
+            const result = await this.classSectionRepository.getClassSectionBy(
+                "id",
+                id
+            );
             if (!result) {
                 logger.error("Class section not found!");
                 return ServiceResponse.failure(
@@ -46,7 +66,8 @@ export class ClassSectionService {
             }
             return ServiceResponse.success<Teacher>("Class section found", result);
         } catch (ex) {
-            const errorMessage = `Error finding class section with id ${id}:, ${(ex as Error).message}`;
+            const errorMessage = `Error finding class section with id ${id}:, ${(ex as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while finding class section.",
@@ -64,12 +85,36 @@ export class ClassSectionService {
         teacher_id: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const isExists = await this.classSectionRepository.isClassSectionExists("full_name", full_name);
-            if (isExists) {
+            const courseExists = await this.courseRepository.isCourseExists(
+                "id",
+                course_id
+            );
+            const semesterExists = await this.semesterRepository.isSemesterExists(
+                "id",
+                semester_id
+            );
+            const teacherExists = await this.teacherRepository.getTeacherById(
+                teacher_id
+            );
+            if (!teacherExists) {
                 return ServiceResponse.failure(
-                    "Class section with this name already exists",
+                    "Teacher not found",
                     null,
-                    StatusCodes.BAD_REQUEST
+                    StatusCodes.NOT_FOUND
+                );
+            }
+            if (!semesterExists) {
+                return ServiceResponse.failure(
+                    "Semester not found",
+                    null,
+                    StatusCodes.NOT_FOUND
+                );
+            }
+            if (!courseExists) {
+                return ServiceResponse.failure(
+                    "Course not found",
+                    null,
+                    StatusCodes.NOT_FOUND
                 );
             }
             const id = await this.classSectionRepository.createClassSection(
@@ -79,9 +124,13 @@ export class ClassSectionService {
                 semester_id,
                 teacher_id
             );
-            return ServiceResponse.success<number>("Class section created successfully", id);
+            return ServiceResponse.success<number>(
+                "Class section created successfully",
+                id
+            );
         } catch (error) {
-            const errorMessage = `Error creating class section: ${(error as Error).message}`;
+            const errorMessage = `Error creating class section: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while creating class section.",
@@ -100,10 +149,45 @@ export class ClassSectionService {
         teacher_id: number
     ): Promise<ServiceResponse<number | null>> {
         try {
-            const isExists = await this.classSectionRepository.isClassSectionExists("id", id);
+            const isExists = await this.classSectionRepository.isClassSectionExists(
+                "id",
+                id
+            );
+            const courseExists = await this.courseRepository.isCourseExists(
+                "id",
+                course_id
+            );
+            const semesterExists = await this.semesterRepository.isSemesterExists(
+                "id",
+                semester_id
+            );
+            const teacherExists = await this.teacherRepository.getTeacherById(
+                teacher_id
+            );
             if (!isExists) {
                 return ServiceResponse.failure(
                     "Class section not found",
+                    null,
+                    StatusCodes.NOT_FOUND
+                );
+            }
+            if (!teacherExists) {
+                return ServiceResponse.failure(
+                    "Teacher not found",
+                    null,
+                    StatusCodes.NOT_FOUND
+                );
+            }
+            if (!semesterExists) {
+                return ServiceResponse.failure(
+                    "Semester not found",
+                    null,
+                    StatusCodes.NOT_FOUND
+                );
+            }
+            if (!courseExists) {
+                return ServiceResponse.failure(
+                    "Course not found",
                     null,
                     StatusCodes.NOT_FOUND
                 );
@@ -116,9 +200,13 @@ export class ClassSectionService {
                 semester_id,
                 teacher_id
             );
-            return ServiceResponse.success<number>("Class section updated successfully", result);
+            return ServiceResponse.success<number>(
+                "Class section updated successfully",
+                result
+            );
         } catch (error) {
-            const errorMessage = `Error updating class section: ${(error as Error).message}`;
+            const errorMessage = `Error updating class section: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while updating class section.",
@@ -128,9 +216,14 @@ export class ClassSectionService {
         }
     }
 
-    async deleteClassSection(id: number): Promise<ServiceResponse<number | null>> {
+    async deleteClassSection(
+        id: number
+    ): Promise<ServiceResponse<number | null>> {
         try {
-            const isExists = await this.classSectionRepository.isClassSectionExists("id", id);
+            const isExists = await this.classSectionRepository.isClassSectionExists(
+                "id",
+                id
+            );
             if (!isExists) {
                 return ServiceResponse.failure(
                     "Class section not found",
@@ -139,9 +232,13 @@ export class ClassSectionService {
                 );
             }
             const result = await this.classSectionRepository.deleteClassSection(id);
-            return ServiceResponse.success<number>("Class section deleted successfully", result);
+            return ServiceResponse.success<number>(
+                "Class section deleted successfully",
+                result
+            );
         } catch (error) {
-            const errorMessage = `Error deleting class section: ${(error as Error).message}`;
+            const errorMessage = `Error deleting class section: ${(error as Error).message
+                }`;
             logger.error(errorMessage);
             return ServiceResponse.failure(
                 "An error occurred while deleting class section.",

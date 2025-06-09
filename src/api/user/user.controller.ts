@@ -30,8 +30,8 @@ class UserController {
 	};
 	public updateUser: RequestHandler = async (req: Request, res: Response) => {
 		const id = Number.parseInt(req.params.id as string, 10);
-		const { full_name, email } = req.body;
-		const serviceResponse = await userService.updateUser(id, full_name, email);
+		const { full_name, phone } = req.body;
+		const serviceResponse = await userService.updateUser(id, full_name, phone);
 		res.status(serviceResponse.statusCode).send(serviceResponse);
 	};
 	public changePassword: RequestHandler = async (

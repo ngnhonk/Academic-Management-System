@@ -20,7 +20,7 @@ export const CreateClassSchema = z.object({
     body: z.object({
         full_name: commonValidations.full_name,
         total_students: commonValidations.positive_number,
-        courses_id: commonValidations.id,
+        course_id: commonValidations.id,
         semester_id: commonValidations.id,
         teacher_id: commonValidations.id
     }),
