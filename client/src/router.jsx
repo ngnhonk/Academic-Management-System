@@ -7,6 +7,7 @@ import TeacherPage from "./features/Teacher/TeacherPage";
 import CoursePage from "./features/Course/CoursePage";
 import SemesterPage from "./features/Semester/SemesterPage";
 import ClassSectionPage from "./features/Class_Section/ClassSectionPage";
+import UserProfile from "./features/User/UserProfile";
 
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "courses", element: <CoursePage /> },
       { path: "semesters", element: <SemesterPage /> },
       { path: "class-sections", element: <ClassSectionPage /> },
+      { path: "profile", element: <UserProfile /> },
     ],
   },
 ]);

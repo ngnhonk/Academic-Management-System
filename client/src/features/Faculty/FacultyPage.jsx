@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import FacultyForm from "./FacultyForm";
 import FacultyList from "./FacultyList";
 import { getAllFaculties } from "../../services/facultyService";
-import "./faculty.css";
 
 export default function FacultyPage() {
   const [selected, setSelected] = useState(null);
