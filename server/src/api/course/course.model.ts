@@ -22,7 +22,7 @@ export const CreateCourseSchema = z.object({
         name: commonValidations.course_name,
         credit: commonValidations.course_credit,
         coefficient: commonValidations.coefficient,
-        total_hour: commonValidations.positive_number,
+        total_hour: commonValidations.total_hours,
     }),
 });
 export const UpdateCourseSchema = z.object({
@@ -33,6 +33,6 @@ export const UpdateCourseSchema = z.object({
         name: commonValidations.course_name,
         credit: commonValidations.course_credit,
         coefficient: commonValidations.coefficient,
-        total_hour: commonValidations.positive_number,
+        total_hour: commonValidations.total_hours,
     }),
 });

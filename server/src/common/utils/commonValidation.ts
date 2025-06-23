@@ -122,8 +122,8 @@ export const commonValidations = {
       required_error: "Số học sinh là bắt buộc",
       invalid_type_error: "Phải là số",
     })
-    .min(20, "Số học sinh phải lớn hơn hoặc bằng 20")
-    .max(200, "Số học sinh không được vượt quá 200")
+    .min(1, "Số học sinh phải lớn hơn hoặc bằng 1")
+    .max(160, "Số học sinh không được vượt quá 160")
     .int("Phải là số nguyên")
     .positive("Phải là số dương"),
 
@@ -134,6 +134,15 @@ export const commonValidations = {
     })
     .min(1, "Số tín chỉ phải lớn hơn hoặc bằng 1")
     .max(10, "Số tín chỉ không được vượt quá 10"),
+
+  total_hours: z
+    .number({
+      required_error: "Số tiết là bắt buộc",
+      invalid_type_error: "Số tiết phải là số",
+    })
+    .min(10, "Số tiết chỉ phải lớn hơn hoặc bằng 20")
+    .max(80, "Số tiết phải nhỏ hơn hoặc bằng 80")
+    .positive("Số tiết phải là số dương"),
 
   coefficient: z
     .number({

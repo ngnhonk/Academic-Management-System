@@ -152,7 +152,7 @@ export default function ClassSectionForm({ selected, setSelected, reload }) {
         name="total_students"
         value={form.total_students}
         onChange={handleChange}
-        placeholder="Sĩ số"
+        placeholder="Số lượng sinh viên"
         required
       />
 
@@ -191,10 +191,10 @@ export default function ClassSectionForm({ selected, setSelected, reload }) {
           onChange={handleChange}
           required
         >
-          <option value="">-- Chọn giảng viên --</option>
+          <option value="">Chọn giảng viên</option>
           {teachers.map((t) => (
-            <option key={t.id} value={t.id}>
-              GV #{t.id}
+            <option key={t.full_name} value={t.id}>
+              {t.full_name}
             </option>
           ))}
         </select>

@@ -98,7 +98,7 @@ export default function CourseForm({ selected, setSelected }) {
         step="0.1"
         value={form.coefficient}
         onChange={handleChange}
-        placeholder="Hệ số tín chỉ"
+        placeholder="Hệ số học phần"
         required
       />
       <input

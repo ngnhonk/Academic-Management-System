@@ -14,6 +14,15 @@ export const ClassSectionSchema = z.object({
     teacher_id: z.number(),
     grade: z.number(),
 });
+export const ClassSectionSchemaDetail = z.object({
+    id: z.number(),
+    full_name: z.string(),
+    total_students: z.number(),
+    course_id: z.string(),
+    semester_id: z.string(),
+    teacher_id: z.string(),
+    grade: z.number(),
+});
 export const GetClassSchema = z.object({
     params: z.object({ id: commonValidations.id }),
 });

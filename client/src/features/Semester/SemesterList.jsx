@@ -49,7 +49,7 @@ export default function SemesterList({ setSelected, reloadFlag, reload }) {
         <tr>
           <th className="border p-2">ID</th>
           <th className="border p-2">Tên</th>
-          <th className="border p-2">Năm</th>
+          <th className="border p-2">Năm bắt đầu</th>
           <th className="border p-2">Từ ngày</th>
           <th className="border p-2">Đến ngày</th>
           <th className="border p-2">Hành động</th>
