@@ -136,7 +136,9 @@ export default function ReportPage() {
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
       {loading ? (
-        <div className="text-center">Đang tải...</div>
+        <div className="loading-container">
+          <div className="spinner"></div>
+        </div>
       ) : (
         <ReportTable level={level} data={reportData} />
       )}

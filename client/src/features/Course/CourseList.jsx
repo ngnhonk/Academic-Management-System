@@ -21,7 +21,7 @@ useEffect(() => {
           <th className="p-2 border">Tên học phần</th>
           <th className="p-2 border">Số tín chỉ</th>
           <th className="p-2 border">Hệ số học phần</th>
-          <th className="p-2 border">Tổng số giờ</th>
+          <th className="p-2 border">Tổng số tiết</th>
           <th className="p-2 border">Hành động</th>
         </tr>
       </thead>
