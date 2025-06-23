@@ -106,7 +106,7 @@ export default function CourseForm({ selected, setSelected }) {
         type="number"
         value={form.total_hour}
         onChange={handleChange}
-        placeholder="Tổng số giờ"
+        placeholder="Tổng số tiết"
         required
       />
       <button type="submit" disabled={submitting}>
